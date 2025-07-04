@@ -559,7 +559,13 @@ body {
                 <div><h3 class="font-bold text-white">Chat with My AI</h3><p id="chat-subtitle" class="text-sm text-slate-400">Ask me how this works!</p></div>
                 <button id="close-chat-btn" class="text-slate-400 hover:text-white" aria-label="Close chat"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
-            <div id="chat-messages" class="chat-messages flex-grow p-4 space-y-4 overflow-y-auto"></div>
+            <div id="chat-messages" class="chat-messages flex-grow p-4 space-y-4 overflow-y-auto">
+                <!-- ADDED: Static message for the user about cold starts -->
+                <div id="cold-start-message" class="text-center text-slate-400 text-sm p-4">
+                    <p>Service may take up to 30 seconds to start due to resource management.</p>
+                    <p class="mt-2">Please send a simple "hi" to wake it up, or refresh if needed.</p>
+                </div>
+            </div>
             <div class="p-4 border-t border-slate-700">
                 <form id="chat-form" class="flex space-x-2">
                     <input type="text" id="chat-input" placeholder="Ask a question..." class="flex-grow bg-slate-700 text-white rounded-lg px-4 py-2 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -700,6 +706,10 @@ body {
         }
 
         function addMessageToChat(message, sender) {
+           const coldStartMessage = document.getElementById('cold-start-message');
+           if (coldStartMessage) {
+                coldStartMessage.remove();
+           }
             renderMessage(message, sender);
             if (sender !== 'system') { chatHistory.push({ message, sender }); if (chatHistory.length > 30) chatHistory.shift(); saveHistory(); }
         }
